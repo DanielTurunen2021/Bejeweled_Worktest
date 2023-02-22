@@ -224,7 +224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: FillTime
-      value: 5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: newPiece
@@ -249,11 +249,11 @@ PrefabInstance:
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: PiecePrefabs.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 7351479978252614031, guid: 06907a2d86390044e8e192e86deec3fc, type: 3}
+      objectReference: {fileID: 2153624641329239089, guid: 17036f7c08377c54bb2eb55c100ed465, type: 3}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: PiecePrefabs.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 2153624641329239089, guid: 17036f7c08377c54bb2eb55c100ed465, type: 3}
+      objectReference: {fileID: 7351479978252614031, guid: 06907a2d86390044e8e192e86deec3fc, type: 3}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: PiecePrefabs.Array.data[2].prefab
       value: 

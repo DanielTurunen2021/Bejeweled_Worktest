@@ -87,7 +87,6 @@ public class GridManager : MonoBehaviour
                 _GemBackground.name = "Background"; 
             }
         }
-        //_CameraTransform.position = new Vector3((float)_GridX / 2 -0.5f, (float)_GridY / 2 -0.5f, -10);
     }
 
 
@@ -100,7 +99,6 @@ public class GridManager : MonoBehaviour
                 SpawnNewPiece(i, j, PieceType.EMPTY);
             }
         }
-        //_CameraTransform.position = new Vector3((float)_GridX / 2 -0.5f, (float)_GridY / 2 -0.5f, -10);
     }
 
     //called until the board is filled
@@ -119,33 +117,32 @@ public class GridManager : MonoBehaviour
 
         /*Goes through the rows in reverse order and checks if pieces can be moved down
          we are ignoring the bottom row because it can't be moved down*/
-        for (int y = _GridY -1; y >= 0; y--) {
+        for (int y = _GridY -2; y >= 0; y--) {
             for (int x = 0; x < _GridY; x++)
             {
                 //current position of the current piece
                 GamePiece piece = _Pieces[x, y];
-
-                if (piece.IsMovable())
-                {
-                    //position below the current piece we are checking.
-                    GamePiece pieceBelow = _Pieces[x, y + 1];
-                    //if the space below the current piece is empty
-                    if (pieceBelow.PieceType == PieceType.EMPTY)
+                
+                    if (piece.IsMovable())
                     {
-                        //move the current piece into the space below it.
-                        piece.MovablePieceComponent.MovePiece(x, y +1);
-                        _Pieces[x, y + 1] = piece;
-                        //Spawn a new piece at the previous location that is now empty.
-                        SpawnNewPiece(x, y, PieceType.EMPTY);
-                        movedPiece = true;
+                        //position below the current piece we are checking.
+                        GamePiece pieceBelow = _Pieces[x, y + 1];
+                        //if the space below the current piece is empty
+                        if (pieceBelow.PieceType == PieceType.EMPTY)
+                        {
+                            //move the current piece into the space below it.
+                            piece.MovablePieceComponent.MovePiece(x, y +1, FillTime);
+                            _Pieces[x, y + 1] = piece;
+                            //Spawn a new piece at the previous location that is now empty.
+                            SpawnNewPiece(x, y, PieceType.EMPTY);
+                            movedPiece = true;
+                        } 
                     }
-                }
             }
         }
-
+        
         for (int x = 0; x < _GridX; x++)
         {
-
             GamePiece pieceBelow = _Pieces[x, 0];
 
             if (pieceBelow.PieceType == PieceType.EMPTY)
@@ -156,11 +153,11 @@ public class GridManager : MonoBehaviour
 
                 _Pieces[x, 0] = newPiece.GetComponent<GamePiece>();
                 _Pieces[x, 0].Init(x, -1, this, PieceType.NORMAL);
-                _Pieces[x, 0].MovablePieceComponent.MovePiece(x, 0);
-                _Pieces[x, 0].ColorComponent.SetColor((ColorPiece.ColorType)Random.Range(0, _Pieces[x, 0].ColorComponent.numColors));
+                _Pieces[x, 0].MovablePieceComponent.MovePiece(x, 0, FillTime);
+                //_Pieces[x, 0].ColorComponent.SetColor((ColorPiece.ColorType)Random.Range(0, _Pieces[x, 0].ColorComponent.numColors));
+                movedPiece = true;
             }
         }
-
         return movedPiece;
     }
 
