@@ -13,7 +13,7 @@ public class ColorPiece : MonoBehaviour
     
     private void Awake()
     {
-        _spriteRenderer = transform.Find("piece").GetComponent<SpriteRenderer>();
+        //_spriteRenderer = transform.Find("piece").GetComponent<SpriteRenderer>();
         _ColorSpriteDict = new Dictionary<ColorType, Sprite>();
         //TODO: Fix the below line.
         //_spriteRenderer.transform.Find("Piece"); 
