@@ -191,8 +191,12 @@ public class GridManager : MonoBehaviour
 
    public bool isAdjacent(GamePiece gamePiece1, GamePiece gamePiece2)
    {
-       return (gamePiece1.XPos == gamePiece2.XPos && Mathf.Abs(gamePiece1.YPos - gamePiece2.YPos) == 1)
-              || (gamePiece1.YPos == gamePiece2.YPos &&  Mathf.Abs(gamePiece1.XPos - gamePiece2.XPos) == 1);
+       Debug.Log("Gamepiece1 XPos: " +gamePiece1.XPos + " Gamepiece2 Xpos: " + gamePiece2.XPos + "\n" + 
+                 "Gamepiece1 Ypos:" + gamePiece1.YPos + " Gamepiece2 YPos: " + gamePiece2.YPos);
+       
+       
+       return (gamePiece1.XPos == gamePiece2.XPos && Mathf.Abs(gamePiece1.YPos - gamePiece2.YPos) == 1) ||
+        (gamePiece1.YPos == gamePiece2.YPos && Mathf.Abs(gamePiece1.XPos - gamePiece2.XPos) == 1);
    }
 
    public void SwapPieces(GamePiece gamePiece1, GamePiece gamePiece2)
@@ -204,7 +208,7 @@ public class GridManager : MonoBehaviour
 
            //Store gamepiece 1's coordinates temporarily so they don't get overwritten when the pieces move.
            int Piece1XPos = gamePiece1.XPos;
-           int Piece1YPos = gamePiece2.YPos;
+           int Piece1YPos = gamePiece1.YPos;
            
            gamePiece1.MovablePieceComponent.MovePiece(gamePiece2.XPos, gamePiece2.YPos, FillTime);
            gamePiece2.MovablePieceComponent.MovePiece(Piece1XPos, Piece1YPos, FillTime);
