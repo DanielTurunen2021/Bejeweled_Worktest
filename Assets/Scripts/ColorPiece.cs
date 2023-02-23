@@ -7,13 +7,13 @@ using UnityEngine.Android;
 public class ColorPiece : MonoBehaviour
 {
     private Dictionary<ColorType, Sprite> _ColorSpriteDict;
-    private ColorType _Color;
+    private ColorType color;
     private SpriteRenderer _spriteRenderer;
     public ColorSprite[] ColorSprites;
     
     private void Awake()
     {
-        //_spriteRenderer = transform.Find("piece").GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _ColorSpriteDict = new Dictionary<ColorType, Sprite>();
         //TODO: Fix the below line.
         //_spriteRenderer.transform.Find("Piece"); 
@@ -32,7 +32,7 @@ public class ColorPiece : MonoBehaviour
         GREEN,
         BLUE,
         YELLOW,
-        PURPLE
+        PURPLE,
     }
     
     [Serializable]
@@ -44,7 +44,7 @@ public class ColorPiece : MonoBehaviour
 
     public ColorType Color
     {
-        get { return _Color; }
+        get { return color; }
         set { SetColor(value); }
     }
 
@@ -55,7 +55,7 @@ public class ColorPiece : MonoBehaviour
     
     public void SetColor(ColorType newColor)
     {
-        _Color = newColor;
+        color = newColor;
         if (_ColorSpriteDict.ContainsKey(newColor))
         {
             _spriteRenderer.sprite = _ColorSpriteDict[newColor];

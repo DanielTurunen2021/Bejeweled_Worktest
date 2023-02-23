@@ -21,7 +21,11 @@ public class GridManager : MonoBehaviour
     public enum PieceType
     {
        EMPTY,
-       NORMAL,
+       RED,
+       GREEN,
+       BLUE,
+       YELLOW,
+       PURPLE,
        COUNT
     }
 
@@ -39,10 +43,7 @@ public class GridManager : MonoBehaviour
     public PiecePrefab[] PiecePrefabs;
 
 
-    private void Awake()
-    {
-      
-    }
+    
 
     private void Start()
     {
@@ -143,6 +144,14 @@ public class GridManager : MonoBehaviour
                     }
             }
         }
+
+       //GamePiece RandomPiece;
+       //int SelectPiece = Random.Range(0, 4);
+
+       //switch (SelectPiece)
+       //{
+       //    
+       //}
         
         for (int x = 0; x < _GridX; x++)
         {
@@ -151,14 +160,14 @@ public class GridManager : MonoBehaviour
             if (pieceBelow.PieceType == PieceType.EMPTY)
             {
                 Destroy(pieceBelow.gameObject);
-                GameObject newPiece = Instantiate(_PiecePrefabDict[PieceType.NORMAL], GetWorldPosition(x, -1),
+                GameObject newPiece = Instantiate(_PiecePrefabDict[PieceType.RED], GetWorldPosition(x, -1),
                     quaternion.identity);
                 newPiece.transform.parent = transform;
 
                 _Pieces[x, 0] = newPiece.GetComponent<GamePiece>();
-                _Pieces[x, 0].Init(x, -1, this, PieceType.NORMAL);
+                _Pieces[x, 0].Init(x, -1, this, PieceType.RED);
                 _Pieces[x, 0].MovablePieceComponent.MovePiece(x, 0, FillTime);
-                //_Pieces[x, 0].ColorComponent.SetColor((ColorPiece.ColorType)Random.Range(0, _Pieces[x, 0].ColorComponent.numColors));
+                _Pieces[x, 0].ColorComponent.SetColor((ColorPiece.ColorType)Random.Range(0, 4));
                 movedPiece = true;
             }
         }
