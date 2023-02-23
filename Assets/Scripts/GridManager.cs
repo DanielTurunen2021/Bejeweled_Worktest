@@ -215,12 +215,24 @@ public class GridManager : MonoBehaviour
            _Pieces[gamePiece1.XPos, gamePiece1.YPos] = gamePiece2;
            _Pieces[gamePiece2.XPos, gamePiece2.YPos] = gamePiece1;
 
-           //Store gamepiece 1's coordinates temporarily so they don't get overwritten when the pieces move.
-           int Piece1XPos = gamePiece1.XPos;
-           int Piece1YPos = gamePiece1.YPos;
-           
-           gamePiece1.MovablePieceComponent.MovePiece(gamePiece2.XPos, gamePiece2.YPos, FillTime);
-           gamePiece2.MovablePieceComponent.MovePiece(Piece1XPos, Piece1YPos, FillTime);
+           if (GetMatch(gamePiece1, gamePiece2.XPos, gamePiece2.YPos) != null ||
+               GetMatch(gamePiece2, gamePiece1.XPos, gamePiece1.YPos) != null)
+           {
+
+
+
+               //Store gamepiece 1's coordinates temporarily so they don't get overwritten when the pieces move.
+               int Piece1XPos = gamePiece1.XPos;
+               int Piece1YPos = gamePiece1.YPos;
+
+               gamePiece1.MovablePieceComponent.MovePiece(gamePiece2.XPos, gamePiece2.YPos, FillTime);
+               gamePiece2.MovablePieceComponent.MovePiece(Piece1XPos, Piece1YPos, FillTime);
+           }
+           else
+           {
+               _Pieces[gamePiece1.XPos, gamePiece1.YPos] = gamePiece1;
+               _Pieces[gamePiece2.XPos, gamePiece2.YPos] = gamePiece2;
+           }
        }
    }
 
@@ -241,6 +253,102 @@ public class GridManager : MonoBehaviour
        {
            SwapPieces(_PressedPiece, _EnteredPiece);
        }
+   }
+
+   public List<GamePiece> GetMatch(GamePiece piece, int newX, int newY)
+   {
+       if (piece.IsColored())
+       {
+           //Variable to store the color of the pieces for later comparison
+           ColorPiece.ColorType colorType = piece.ColorComponent.Color;
+           //Lists for adjacent pieces in the vertical & horizontal directions and a list for matching pieces.
+           List<GamePiece> HorizontalPieces = new List<GamePiece>();
+           List<GamePiece> VerticalPieces = new List<GamePiece>();
+           List<GamePiece> MatchingPieces = new List<GamePiece>();
+           
+         
+           
+           //first check horizontally
+           HorizontalPieces.Add(piece);
+
+           for (int Dir = 0; Dir <= 1; Dir++) {
+               for (int xOffset = 1; xOffset < _GridX; xOffset++)
+               {
+                   int x;
+                   if (Dir == 0)//Checking to the left
+                   {
+                       x = newX - xOffset;
+                   }
+                   else {//Checking to the right
+                       x = newX + xOffset;
+                   }
+
+                   if (x < 0 || x >= _GridX) {
+                       break;
+                   }
+                   //If we find a matching piece we add it to the horizontal list.
+                   if (_Pieces[x, newY].IsColored() && _Pieces[x, newY].ColorComponent.Color == colorType) {
+                       HorizontalPieces.Add(_Pieces[x, newY]);
+                   }
+                   else {
+                       break; //If we stop finding matching pieces we break the loop.
+                   } 
+               }
+           }
+
+           if (HorizontalPieces.Count >= 3)
+           {
+               for (int i = 0; i < HorizontalPieces.Count; i++) {
+                   MatchingPieces.Add(HorizontalPieces[i]);
+               }
+           }
+
+           if (MatchingPieces.Count >= 3) {
+               return MatchingPieces;
+           }
+           
+           
+           //second check vertically
+           VerticalPieces.Add(piece);
+
+           for (int Dir = 0; Dir <= 1; Dir++) {
+               for (int yOffset = 1; yOffset < _GridY; yOffset++)
+               {
+                   int y;
+                   if (Dir == 0)//Checking up
+                   {
+                       y = newY - yOffset;
+                   }
+                   else {//Checking down
+                       y = newY + yOffset;
+                   }
+
+                   if (y < 0 || y >= _GridY)
+                   {
+                       break;
+                   }
+                   //If we find a matching piece we add it to the horizontal list.
+                   if (_Pieces[newX, y].IsColored() && _Pieces[newX, y].ColorComponent.Color == colorType) {
+                       VerticalPieces.Add(_Pieces[newX, y]);
+                   }
+                   else {
+                       break; //If we stop finding matching pieces we break the loop.
+                   }  
+               }
+           }
+
+           if (VerticalPieces.Count >= 3)
+           {
+               for (int i = 0; i < VerticalPieces.Count; i++) {
+                   MatchingPieces.Add(VerticalPieces[i]);
+               }
+           }
+
+           if (MatchingPieces.Count >= 3) {
+               return MatchingPieces;
+           }
+       }
+       return null;
    }
 }
 
