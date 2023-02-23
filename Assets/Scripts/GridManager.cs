@@ -15,6 +15,8 @@ public class GridManager : MonoBehaviour
     public float FillTime;
     private GamePiece[,] _Pieces;
     private GameObject newPiece;
+    private GamePiece _PressedPiece;
+    private GamePiece _EnteredPiece;
     
     public enum PieceType
     {
@@ -130,6 +132,7 @@ public class GridManager : MonoBehaviour
                         //if the space below the current piece is empty
                         if (pieceBelow.PieceType == PieceType.EMPTY)
                         {
+                            Destroy(pieceBelow.gameObject);
                             //move the current piece into the space below it.
                             piece.MovablePieceComponent.MovePiece(x, y +1, FillTime);
                             _Pieces[x, y + 1] = piece;
@@ -147,6 +150,7 @@ public class GridManager : MonoBehaviour
 
             if (pieceBelow.PieceType == PieceType.EMPTY)
             {
+                Destroy(pieceBelow.gameObject);
                 GameObject newPiece = Instantiate(_PiecePrefabDict[PieceType.NORMAL], GetWorldPosition(x, -1),
                     quaternion.identity);
                 newPiece.transform.parent = transform;
@@ -183,6 +187,47 @@ public class GridManager : MonoBehaviour
        _Pieces[x, y].Init(x, y, this, pieceType);
 
        return _Pieces[x, y];
+   }
+
+   public bool isAdjacent(GamePiece gamePiece1, GamePiece gamePiece2)
+   {
+       return (gamePiece1.XPos == gamePiece2.XPos && Mathf.Abs(gamePiece1.YPos - gamePiece2.YPos) == 1)
+              || (gamePiece1.YPos == gamePiece2.YPos &&  Mathf.Abs(gamePiece1.XPos - gamePiece2.XPos) == 1);
+   }
+
+   public void SwapPieces(GamePiece gamePiece1, GamePiece gamePiece2)
+   {
+       if (gamePiece1.IsMovable() && gamePiece2.IsMovable())
+       {
+           _Pieces[gamePiece1.XPos, gamePiece1.YPos] = gamePiece2;
+           _Pieces[gamePiece2.XPos, gamePiece2.YPos] = gamePiece1;
+
+           //Store gamepiece 1's coordinates temporarily so they don't get overwritten when the pieces move.
+           int Piece1XPos = gamePiece1.XPos;
+           int Piece1YPos = gamePiece2.YPos;
+           
+           gamePiece1.MovablePieceComponent.MovePiece(gamePiece2.XPos, gamePiece2.YPos, FillTime);
+           gamePiece2.MovablePieceComponent.MovePiece(Piece1XPos, Piece1YPos, FillTime);
+       }
+   }
+
+
+   public void PressPiece(GamePiece PressedPiece)
+   {
+       _PressedPiece = PressedPiece;
+   }
+
+   public void EnterPiece(GamePiece EnteredPiece)
+   {
+       _EnteredPiece = EnteredPiece;
+   }
+
+   public void ReleasePiece()
+   {
+       if (isAdjacent(_PressedPiece, _EnteredPiece))
+       {
+           SwapPieces(_PressedPiece, _EnteredPiece);
+       }
    }
 }
 

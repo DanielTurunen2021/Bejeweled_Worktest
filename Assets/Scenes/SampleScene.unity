@@ -224,7 +224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: FillTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1649779048054204846, guid: b18d8fbcb6dfe0c42adc1e1f35cdec28, type: 3}
       propertyPath: newPiece

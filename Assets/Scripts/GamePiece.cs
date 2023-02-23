@@ -89,4 +89,19 @@ public class GamePiece : MonoBehaviour
         _gridManager = gridManager;
         _pieceType = pieceType;
     }
+
+    private void OnMouseDown()
+    {
+        _gridManager.PressPiece(this);
+    }
+
+    private void OnMouseEnter()
+    {
+        _gridManager.EnterPiece(this);
+    }
+
+    private void OnMouseUp()
+    {
+        _gridManager.ReleasePiece();
+    }
 }
