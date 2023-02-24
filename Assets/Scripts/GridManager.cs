@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -82,8 +81,8 @@ public class GridManager : MonoBehaviour
     
     void MakeBackground2()
     {
-        for (int i = 0; i < _GridX ; i+=3) {
-            for (int j = 0; j < _GridY; j+=3)
+        for (int i = 0; i < _GridX ; i+=2) {
+            for (int j = 0; j < _GridY; j+=2)
             {
                 _GemBackground = Instantiate(_GemBackground,GetBackgroundWorldPosition(i, j)  , Quaternion.identity);
                 _GemBackground.transform.parent = transform;
@@ -201,12 +200,8 @@ public class GridManager : MonoBehaviour
 
    public bool isAdjacent(GamePiece gamePiece1, GamePiece gamePiece2)
    {
-       //Debug.Log("Gamepiece1 XPos: " +gamePiece1.XPos + " Gamepiece2 Xpos: " + gamePiece2.XPos + "\n" + 
-       //          "Gamepiece1 Ypos:" + gamePiece1.YPos + " Gamepiece2 YPos: " + gamePiece2.YPos);
-       
-       
        return (gamePiece1.XPos == gamePiece2.XPos && Mathf.Abs(gamePiece1.YPos - gamePiece2.YPos) == 1) ||
-        (gamePiece1.YPos == gamePiece2.YPos && Mathf.Abs(gamePiece1.XPos - gamePiece2.XPos) == 1);
+              (gamePiece1.YPos == gamePiece2.YPos && Mathf.Abs(gamePiece1.XPos - gamePiece2.XPos) == 1);
    }
 
    public void SwapPieces(GamePiece gamePiece1, GamePiece gamePiece2)
@@ -228,7 +223,8 @@ public class GridManager : MonoBehaviour
 
                gamePiece1.MovablePieceComponent.MovePiece(gamePiece2.XPos, gamePiece2.YPos, FillTime);
                gamePiece2.MovablePieceComponent.MovePiece(Piece1XPos, Piece1YPos, FillTime);
-
+                
+               //Clears all matches, if any and refills the board.
                ClearAllMatches();
 
                StartCoroutine(Fill());
@@ -241,7 +237,7 @@ public class GridManager : MonoBehaviour
        }
    }
 
-
+    //Mouse checks
    public void PressPiece(GamePiece PressedPiece)
    {
        _PressedPiece = PressedPiece;
@@ -309,7 +305,7 @@ public class GridManager : MonoBehaviour
            }
            
            //Traverse vertically for L and T shapes
-           
+           //if we find 3 matching horizontal pieces we check each if they have any vertical matches
            if (HorizontalPieces.Count >= 3)
            {
                for (int i = 0; i < HorizontalPieces.Count; i++) {
@@ -393,6 +389,7 @@ public class GridManager : MonoBehaviour
            
            
            //Traverse horizontally if we found a match(L & T shape)
+           //If we find 3 vertically matching pieces we check if there are any horizontal matches for each piece.
            if (VerticalPieces.Count >= 3)
            {
                for (int i = 0; i < HorizontalPieces.Count; i++) {
@@ -410,7 +407,7 @@ public class GridManager : MonoBehaviour
                                break;
                            }
                             
-                           //Check if the current horizontal piece has the same color as the current horizontal piece.
+                           //Check if the current vertical piece has the same color as the current horizontal piece.
                            if (_Pieces[x, VerticalPieces[i].YPos].IsColored() &&
                                _Pieces[x, VerticalPieces[i].YPos].ColorComponent.Color == colorType) {
                                VerticalPieces.Add(_Pieces[x, VerticalPieces[i].YPos]);
@@ -420,7 +417,7 @@ public class GridManager : MonoBehaviour
                            }
                        }
                    }
-                   //If there are not enough vertical matches we clear the list and check the next horizontal piece for matches.
+                   //If there are not enough horizontal matches we clear the list and check the next horizontal piece for matches.
                    if (HorizontalPieces.Count < 2) {
                        HorizontalPieces.Clear();
                    }
@@ -439,6 +436,7 @@ public class GridManager : MonoBehaviour
        return null;
    }
 
+   //Checks if the piece has a clearable component and if the piece isn't being cleared.
    public bool ClearPiece(int x, int y)
    {
        if (_Pieces[x, y].IsClearable() && !_Pieces[x, y].ClearablePieceComponent.isBeingCleared)
@@ -450,6 +448,8 @@ public class GridManager : MonoBehaviour
        return false;
    }
 
+   
+   //Clears all the matches if there are any.
    public bool ClearAllMatches()
    {
        bool needsReFill = false;
@@ -473,68 +473,4 @@ public class GridManager : MonoBehaviour
        return needsReFill;
    }
 }
-
-
-
-//newPiece = (GameObject)Instantiate(_PiecePrefabDict[PieceType.NORMAL], 
-//    GetWorldPosition(i, j) ,quaternion.identity);
-////newPiece.name = "piece(" + i + "," + j +")";
-//newPiece.transform.parent = transform;
-//
-//_Pieces[i, j] = newPiece.GetComponent<GamePiece>();
-//_Pieces[i, j].Init(i, j, this, PieceType.NORMAL);
-//
-//if (_Pieces[i, j].IsMovable())
-//{
-//    _Pieces[i, j].MovablePieceComponent.MovePiece(i,j);
-//}
-
-//if (_Pieces[i, j].IsColored())
-//{
-//    _Pieces[i, j].ColorComponent.SetColor((ColorPiece.ColorType)Random.Range(0, 5));
-//}
-
-
-
-
-
-
-//Traverse horizontally for L and T shapes
-/*if (VerticalPieces.Count >= 3)
-{
-    for (int i = 0; i < VerticalPieces.Count; i++) {
-        for (int Dir = 0; Dir <= 1; Dir++) {
-            for (int xOffset = 1; xOffset < _GridY; xOffset++) {
-                int x;
-
-                if (Dir == 0) {//check left
-                    x = newX - xOffset;
-                }
-                else { //Check right
-                    x = newX + xOffset;
-                }
-                if(x < 0 || x >= _GridX){
-                    break;
-                }
-
-                if (_Pieces[x, VerticalPieces[i].YPos].IsColored() &&
-                    _Pieces[x,VerticalPieces[i].YPos].ColorComponent.Color == colorType) {
-                    VerticalPieces.Add(_Pieces[x, VerticalPieces[i].YPos]);
-                }
-                else {
-                    break;
-                }
-            }
-        }
-        if(HorizontalPieces.Count < 2){
-            HorizontalPieces.Clear();
-        }
-        else
-        {
-            for (int j = 0; j < HorizontalPieces.Count; j++) {
-                MatchingPieces.Add(VerticalPieces[j]);
-            }
-        }
-    }
-}*/
 

@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovablePiece : MonoBehaviour
@@ -26,11 +23,6 @@ public class MovablePiece : MonoBehaviour
         _MoveCoroutine = MoveCoroutine(newXPos, newYPos, timeToPlay);
         StartCoroutine(_MoveCoroutine);
         
-        
-        //_Piece.XPos = newXPos;
-        //_Piece.YPos = newYPos;
-//
-        //_Piece.transform.localPosition = _Piece.GridManagerRef.GetWorldPosition(newXPos, newYPos);
     }
 
     private IEnumerator MoveCoroutine(int newXPos, int newYPos, float timeToPlay)
