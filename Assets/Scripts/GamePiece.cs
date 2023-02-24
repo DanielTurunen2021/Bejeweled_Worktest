@@ -12,11 +12,13 @@ public class GamePiece : MonoBehaviour
     private GridManager _gridManager;
     private MovablePiece _movablePieceComponent;
     private ColorPiece _ColorComponent;
+    private ClearablePiece _clearablePieceComponent;
 
     private void Awake()
     {
         _movablePieceComponent = GetComponent<MovablePiece>();
         _ColorComponent = GetComponent<ColorPiece>();
+        _clearablePieceComponent = GetComponent<ClearablePiece>();
     }
 
     public int XPos
@@ -69,8 +71,9 @@ public class GamePiece : MonoBehaviour
     {
         get => _ColorComponent;
     }
-    
-    
+
+    public ClearablePiece ClearablePieceComponent => _clearablePieceComponent;
+
 
     public bool IsMovable()
     {
@@ -80,6 +83,11 @@ public class GamePiece : MonoBehaviour
     public bool IsColored()
     {
         return _ColorComponent != null;
+    }
+
+    public bool IsClearable()
+    {
+        return _clearablePieceComponent != null;
     }
 
     public void Init(int xpos, int ypos, GridManager gridManager, GridManager.PieceType pieceType)
